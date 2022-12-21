@@ -1,0 +1,3 @@
+message RemoveFromQueueMsg{
+	int howMany;	
+}
