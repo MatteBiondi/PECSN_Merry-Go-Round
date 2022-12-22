@@ -35,23 +35,28 @@ void ChildQueue::handleMessage(cMessage *msg){
         insertIntoQueue(childArrivalMsg);
         // Send how many children are queued to owner
         sendHowManyMessage();
+        delete childArrivalMsg;
     }
     else if(msgSender.compare("Owner") == 0 && msg->isName(HOWMANY_REQUEST)){
         // Send how many children are queued to owner
         sendHowManyMessage();
+        delete msg;
     }
     else if(msgSender.compare("Owner") == 0 && msg->isName(REMOVE_FROM_QUEUE)){
         // Delete served children from queue
         RemoveFromQueueMsg* removeMsg = check_and_cast<RemoveFromQueueMsg*>(msg);
         removeFromQueue(removeMsg);
+        delete removeMsg;
     }
     else if(msg->isSelfMessage() && msg->isName(QUIT_CHILD)){
         // Delete quitting child from queue
         QueueQuitMsg* quitMsg = check_and_cast<QueueQuitMsg*>(msg);
         quitFromQueue(quitMsg);
+        delete quitMsg;
     }
     else{
         EV_WARN << "Unexpected message {"<< msg->getName() << ", " << msgSender << "}" << endl;
+        delete msg;
     }
 }
 
