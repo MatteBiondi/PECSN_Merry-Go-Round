@@ -6,9 +6,9 @@ Define_Module(Owner);
 
 void Owner::initialize()
 {
-    _minChildren = par("v");
-    _coinPerRide = par("c");
     _nSeats = par("N");
+    _minChildren = _nSeats * (double)par("v_fraction");
+    _coinPerRide = par("c");
     _coinSignal = registerSignal("earnedCoins");
 }
 
