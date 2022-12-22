@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# Generated 
+MerryGoRound/src/Makefile
+MerryGoRound/out/
+MerryGoRound_dbg
+MerryGoRound_release
