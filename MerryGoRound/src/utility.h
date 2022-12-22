@@ -10,3 +10,5 @@
 #define HOWMANY_CHILDREN    "HowmanyChildren"
 #define HOWMANY_REQUEST     "HowmanyRequest"
 #define REMOVE_FROM_QUEUE   "RemoveFromQueue"
+#define MRG_IS_FREE         "MrgIsFree"
+#define START_MRG           "StartMrg"

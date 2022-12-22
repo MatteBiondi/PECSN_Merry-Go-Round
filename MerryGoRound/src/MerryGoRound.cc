@@ -6,17 +6,17 @@ void MerryGoRound::initialize()
 {
     _T = par("T");
     _rideFinishedMsg = new cMessage("rideFinished");
-    _rideFinishedMsg->setSchedulingPriority(1); //medium priority
+    _rideFinishedMsg->setSchedulingPriority(MEDIUM_PRIORITY); //medium priority
 }
 
 void MerryGoRound::handleMessage(cMessage *msg)
 {
-    if(msg -> isName(_STARTMRGMSG)){
+    if(msg -> isName(START_MRG)){
         scheduleAfter(_T, _rideFinishedMsg);
     }
     if(msg -> isSelfMessage()){
-        cMessage *msg = new cMessage(_MRGISFREEMSG);
-        msg->setSchedulingPriority(1);  //medium priority
+        cMessage *msg = new cMessage(MRG_IS_FREE);
+        msg->setSchedulingPriority(MEDIUM_PRIORITY);  //medium priority
         send(msg, "out");
     }
 }

@@ -1,5 +1,6 @@
 #include "Owner.h"
 #include "RemoveFromQueueMsg_m.h"
+#include "QueueHowManyMsg_m.h"
 
 Define_Module(Owner);
 
@@ -13,41 +14,48 @@ void Owner::initialize()
 
 void Owner::handleMessage(cMessage *msg)
 {
-    if(msg -> isName(_MRGISFREEMSG))
+    if(msg -> isName(MRG_IS_FREE))
         handleMrgIsFreeMsg();
-    if(msg -> isName(_NUMCHILDRENMSG))
-        handleNumChildrenMsg();
+    if(msg -> isName(HOWMANY_CHILDREN))
+        handleNumChildrenMsg(msg);
 }
 
+//handler of the message sent by the MGR, signaling that it has finished the ride
 void Owner::handleMrgIsFreeMsg(){
     _mgrIsFree = true;
-    cMessage *msg = new cMessage(_HOWMANYCHILDRENMSG);
-    msg->setSchedulingPriority(2); //highest priority
+    cMessage *msg = new cMessage(HOWMANY_REQUEST);
+    msg->setSchedulingPriority(HIGH_PRIORITY); //highest priority
     send(msg, "outToQueue");
 }
 
-void Owner::handleNumChildrenMsg(){
+//handler of the message sent by the queue, signaling the actual number of children in it
+void Owner::handleNumChildrenMsg(cMessage *receivedMsg){
+    //if the MGR is busy, I can not accept new children to ride
     if(!_mgrIsFree)
         return;
-    int num;    //get through the custom message
+
+    QueueHowManyMessage *queueHowManyMessage = check_and_cast<QueueHowManyMessage*>(receivedMsg);
+    int num = queueHowManyMessage -> getHowMany();
+
     if(num >= _minChildren){
-        RemoveFromQueueMsg *msg = new RemoveFromQueueMsg(_REMOVEFROMQUEUEMSG);
+        //if the number of children is above the threshold I can ask for removing some of them to enjoy a ride
+        RemoveFromQueueMsg *msg = new RemoveFromQueueMsg(REMOVE_FROM_QUEUE);
         if(num >= _nSeats){
-            //send msg asking for _N children
+            //if there are more children than the MGR capacity, I have to ask for the maximum number, the capacity itself
             msg -> setHowMany(_nSeats);
             _totEarn += _nSeats*_coinPerRide;
             emit(_coinSignal, _nSeats*_coinPerRide);
         }
         else{
-            //send msg asking for num children
+            //otherwise I ask for all the children in the queue
             msg -> setHowMany(num);
             _totEarn += num*_coinPerRide;
             emit(_coinSignal, num*_coinPerRide);
         }
-        msg->setSchedulingPriority(2); //highest priority
+        msg->setSchedulingPriority(HIGH_PRIORITY); //highest priority
         send(msg, "outToQueue");
-        cMessage *startMRG = new cMessage(_STARTMRGMSG);
-        startMRG->setSchedulingPriority(2);
+        cMessage *startMRG = new cMessage(START_MRG);
+        startMRG->setSchedulingPriority(HIGH_PRIORITY);
         send(startMRG, "outToMRG");
         _mgrIsFree = false;
     }
