@@ -10,6 +10,9 @@
 // Initialize the static member variable
 int Child::_nextId = 1;
 
+// Default constructor
+Child::Child(){}
+
 // Constructor implementation
 Child::Child(double _quitTime) :
     _id(_nextId++), _quitTime(_quitTime) {}

@@ -12,6 +12,9 @@
 
 class Child {
 public:
+    // Default constructor
+    Child();
+
     // Constructor
     Child(double _quitTime);
 
