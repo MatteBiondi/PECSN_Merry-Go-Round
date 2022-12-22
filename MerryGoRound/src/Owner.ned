@@ -7,7 +7,7 @@ simple Owner
 		int c;	//number of coins earned for each child who enjoys a ride
 		int N;	//number of seats of the MGR
 		@signal[earnedCoins](type=int);
-		@statistic[coinsPerUnitOfTime](source=sumPerDuration("earnedCoins"); record=last;);
+		@statistic[coinsPerUnitOfTime](source=sumPerDuration(earnedCoins); record=last;);
 	
 	gates:
 		input inFromQueue;
