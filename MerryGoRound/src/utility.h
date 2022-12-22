@@ -6,3 +6,7 @@
 // Name of exchanged messages
 #define CHILD_ARRIVAL       "ChildArrivalMsg"
 #define CREATE_CHILDREN     "CreateChildren"
+#define QUIT_CHILD          "QuitChild"
+#define HOWMANY_CHILDREN    "HowmanyChildren"
+#define HOWMANY_REQUEST     "HowmanyRequest"
+#define REMOVE_FROM_QUEUE   "RemoveFromQueue"
