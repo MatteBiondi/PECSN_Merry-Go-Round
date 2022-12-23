@@ -12,6 +12,7 @@ class MerryGoRound : public cSimpleModule
     int _T; //how many seconds a ride lasts
     cMessage *_rideFinishedMsg; //loopback message
     simsignal_t _rideStart;
+    simsignal_t _rideStop;
 
   protected:
     virtual void initialize() override;

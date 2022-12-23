@@ -17,7 +17,9 @@ simple ChildPool
         double Lambda;
         double P;
         @signal[arrivals](type=double);
+        @signal[bulk](type=int);
 		@statistic[interArrivalStat](source=arrivals; record=vector,stats;);
+		@statistic[bulkStat](source=bulk; record=vector,stats;);
         
     gates:
         output toChildQueue;

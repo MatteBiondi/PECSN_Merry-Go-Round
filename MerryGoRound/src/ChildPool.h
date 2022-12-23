@@ -29,6 +29,7 @@ private:
     double _P;
     // Signals
     simsignal_t _arrivalSignal;
+    simsignal_t _bulkSignal;
 
 protected:
     virtual void initialize() override;

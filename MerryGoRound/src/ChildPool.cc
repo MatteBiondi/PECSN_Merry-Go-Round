@@ -18,6 +18,7 @@ void ChildPool::initialize()
     _Lambda = par("Lambda");
     _P = par("P");
     _arrivalSignal = registerSignal("arrivals");
+    _bulkSignal = registerSignal("bulk");
 
     // Generate the message for next children creation
     _nextArrival = new cMessage(CREATE_CHILDREN);
@@ -32,7 +33,7 @@ void ChildPool::handleMessage(cMessage *msg)
     if(msg->isSelfMessage()){
         // Extract a random number of children to be generated
         int n = (_P == 1)? 1 : (geometric(_P) + 1);
-
+        emit(_bulkSignal, n);
         // Create message to be sent to ChildQueue
         _newChildren = new ChildArrivalMsg();
 
