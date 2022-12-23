@@ -34,9 +34,10 @@ class ChildQueue : public cSimpleModule
 {
   private:
     list<Child> _queue;
-    simsignal_t queueTotalCount;
-    simsignal_t queueQuitCount;
-
+    simsignal_t _queueTotalCount;
+    simsignal_t _queueQuitCount;
+    simsignal_t _queueServedCount;
+    simsignal_t _queueLength;
     void insertIntoQueue(ChildArrivalMsg* childArrivalMsg);
     void sendHowManyMessage();
     void removeFromQueue(RemoveFromQueueMsg* removeMsg);

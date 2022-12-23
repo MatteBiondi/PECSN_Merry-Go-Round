@@ -15,16 +15,17 @@
 
 package merrygoround;
 
-//
-// TODO auto-generated module
-//
 simple ChildQueue
 {
     parameters:
         @signal[queueTotalCount](type=unsigned int);
         @signal[queueQuitCount](type=unsigned int);
+        @signal[queueServedCount](type=unsigned int);
+        @signal[queueLength](type=unsigned int);
         @statistic[queueTotalCountStat](source="queueTotalCount";record=sum); 
-        @statistic[queueQuitCountStat](source="queueQuitCount";record=sum);        
+        @statistic[queueQuitCountStat](source="queueQuitCount";record=sum);     
+        @statistic[queueServedCountStat](source="queueServedCount";record=sum); 
+        @statistic[queueLengthStat](source="queueLength";record=mean,timeavg);     
     gates:
         input childPoolIn;
         input ownerIn;
