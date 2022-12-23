@@ -29,14 +29,14 @@ void ChildPool::handleMessage(cMessage *msg)
     // Check that the received message is the self message (obvious for the module)
     if(msg->isSelfMessage()){
         // Extract a random number of children to be generated
-        int n = geometric(_P);
+        int n = geometric(_P) + 1;
 
         // Create message to be sent to ChildQueue
         _newChildren = new ChildArrivalMsg();
 
         // Generate n children and add them to the message
         for (unsigned int i = 0; i < n; ++i){
-            double quitTime = _Q + exponential(_Delta);
+            double quitTime = simTime().dbl() + _Q + exponential(_Delta);
             _newChildren->addChild(quitTime);
         }
 
