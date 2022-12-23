@@ -9,7 +9,7 @@ using namespace omnetpp;
 class MerryGoRound : public cSimpleModule
 {
   private:
-    simtime_t _T; //how many seconds a ride lasts
+    int _T; //how many seconds a ride lasts
     cMessage *_rideFinishedMsg; //loopback message
     simsignal_t _rideStart;
 
