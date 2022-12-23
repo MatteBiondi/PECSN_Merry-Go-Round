@@ -29,7 +29,7 @@ void ChildPool::handleMessage(cMessage *msg)
     // Check that the received message is the self message (obvious for the module)
     if(msg->isSelfMessage()){
         // Extract a random number of children to be generated
-        int n = geometric(_P) + 1;
+        int n = (_P == 1)? 1 : (geometric(_P) + 1);
 
         // Create message to be sent to ChildQueue
         _newChildren = new ChildArrivalMsg();
@@ -47,4 +47,8 @@ void ChildPool::handleMessage(cMessage *msg)
         _time = exponential(_Lambda);
         scheduleAt(simTime()+_time, _nextArrival);
     }
+}
+
+void ChildPool::finish() {
+    delete _nextArrival;
 }
