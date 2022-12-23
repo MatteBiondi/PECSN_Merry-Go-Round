@@ -14,9 +14,11 @@ void Owner::initialize()
 
 void Owner::handleMessage(cMessage *msg)
 {
-    if(msg -> isName(MRG_IS_FREE))
+    if(msg -> isName(MRG_IS_FREE)){
         handleMrgIsFreeMsg();
-    if(msg -> isName(HOWMANY_CHILDREN))
+        delete msg; //FIXME
+    }
+    else if(msg -> isName(HOWMANY_CHILDREN)) //FIXME: otherwise the isName function work on possibly already deleted message
         handleNumChildrenMsg(msg);
 }
 
@@ -30,11 +32,14 @@ void Owner::handleMrgIsFreeMsg(){
 
 //handler of the message sent by the queue, signaling the actual number of children in it
 void Owner::handleNumChildrenMsg(cMessage *receivedMsg){
-    //if the MGR is busy, I can not accept new children to ride
-    if(!_mgrIsFree)
-        return;
-
     QueueHowManyMessage *queueHowManyMessage = check_and_cast<QueueHowManyMessage*>(receivedMsg);
+    //if the MGR is busy, I can not accept new children to ride
+    if(!_mgrIsFree){
+        delete queueHowManyMessage;
+        return;
+    }
+
+
     int num = queueHowManyMessage -> getHowMany();
 
     if(num >= _minChildren){
@@ -56,7 +61,9 @@ void Owner::handleNumChildrenMsg(cMessage *receivedMsg){
         send(msg, "outToQueue");
         cMessage *startMRG = new cMessage(START_MRG);
         startMRG->setSchedulingPriority(HIGH_PRIORITY);
-        send(startMRG, "outToMRG");
+        send(startMRG, "outToMGR");//FIXME
         _mgrIsFree = false;
     }
+
+    delete queueHowManyMessage; //FIXME
 }

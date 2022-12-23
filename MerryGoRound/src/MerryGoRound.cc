@@ -13,10 +13,12 @@ void MerryGoRound::handleMessage(cMessage *msg)
 {
     if(msg -> isName(START_MRG)){
         scheduleAfter(_T, _rideFinishedMsg);
+        delete msg;//FIXME
     }
     if(msg -> isSelfMessage()){
         cMessage *msg = new cMessage(MRG_IS_FREE);
         msg->setSchedulingPriority(MEDIUM_PRIORITY);  //medium priority
         send(msg, "out");
+        //NOTE: do not delete this message, it is reused each time the MRG ride finish
     }
 }
