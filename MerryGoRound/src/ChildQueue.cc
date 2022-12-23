@@ -29,9 +29,7 @@ void ChildQueue::initialize(){
 }
 
 void ChildQueue::handleMessage(cMessage *msg){
-    string msgSender = msg->getSenderModule()->getName();
-
-    if(msgSender.compare("childPool") == 0 && msg->isName(CHILD_ARRIVAL)){
+    if(msg->isName(CHILD_ARRIVAL)){
         ChildArrivalMsg* childArrivalMsg = check_and_cast<ChildArrivalMsg*>(msg);
         // Queue up the new children and schedule drop events
         insertIntoQueue(childArrivalMsg);
@@ -39,12 +37,12 @@ void ChildQueue::handleMessage(cMessage *msg){
         sendHowManyMessage();
         delete childArrivalMsg;
     }
-    else if(msgSender.compare("owner") == 0 && msg->isName(HOWMANY_REQUEST)){
+    else if(msg->isName(HOWMANY_REQUEST)){
         // Send how many children are queued to owner
         sendHowManyMessage();
         delete msg;
     }
-    else if(msgSender.compare("owner") == 0 && msg->isName(REMOVE_FROM_QUEUE)){
+    else if(msg->isName(REMOVE_FROM_QUEUE)){
         // Delete served children from queue
         RemoveFromQueueMsg* removeMsg = check_and_cast<RemoveFromQueueMsg*>(msg);
         removeFromQueue(removeMsg);
@@ -57,7 +55,7 @@ void ChildQueue::handleMessage(cMessage *msg){
         delete quitMsg;
     }
     else{
-        EV_WARN << "Unexpected message {"<< msg->getName() << ", " << msgSender << "}" << endl;
+        EV_WARN << "Unexpected message {"<< msg->getName() << "}" << endl;
         delete msg;
     }
 }

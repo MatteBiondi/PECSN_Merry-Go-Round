@@ -18,7 +18,6 @@
 
 #include <omnetpp.h>
 #include <list>
-#include <string>
 #include <algorithm>
 #include "QueueHowManyMsg_m.h"
 #include "QueueQuitMsg_m.h"
