@@ -17,10 +17,12 @@ void ChildPool::initialize()
     _Delta = par("Delta");
     _Lambda = par("Lambda");
     _P = par("P");
+    _arrivalSignal = registerSignal("arrivals");
 
     // Generate the message for next children creation
     _nextArrival = new cMessage(CREATE_CHILDREN);
     _time = exponential(_Lambda);
+    emit(_arrivalSignal, _time);
     scheduleAt(simTime()+_time, _nextArrival);
 }
 
@@ -45,6 +47,7 @@ void ChildPool::handleMessage(cMessage *msg)
 
         // Generate the message for next children creation
         _time = exponential(_Lambda);
+        emit(_arrivalSignal, _time);
         scheduleAt(simTime()+_time, _nextArrival);
     }
 }
