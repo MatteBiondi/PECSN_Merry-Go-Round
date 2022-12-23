@@ -53,5 +53,8 @@ void ChildPool::handleMessage(cMessage *msg)
 }
 
 void ChildPool::finish() {
-    delete _nextArrival;
+    if (_nextArrival->isScheduled())
+        cancelAndDelete(_nextArrival);
+    else
+        delete _nextArrival;
 }
