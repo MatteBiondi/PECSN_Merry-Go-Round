@@ -16,9 +16,9 @@ void Owner::handleMessage(cMessage *msg)
 {
     if(msg -> isName(MRG_IS_FREE)){
         handleMrgIsFreeMsg();
-        delete msg; //FIXME
+        delete msg;
     }
-    else if(msg -> isName(HOWMANY_CHILDREN)) //FIXME: otherwise the isName function work on possibly already deleted message
+    else if(msg -> isName(HOWMANY_CHILDREN))
         handleNumChildrenMsg(msg);
 }
 
@@ -61,9 +61,9 @@ void Owner::handleNumChildrenMsg(cMessage *receivedMsg){
         send(msg, "outToQueue");
         cMessage *startMRG = new cMessage(START_MRG);
         startMRG->setSchedulingPriority(HIGH_PRIORITY);
-        send(startMRG, "outToMGR");//FIXME
+        send(startMRG, "outToMGR");
         _mgrIsFree = false;
     }
 
-    delete queueHowManyMessage; //FIXME
+    delete queueHowManyMessage;
 }
