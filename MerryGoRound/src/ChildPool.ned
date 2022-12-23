@@ -16,6 +16,8 @@ simple ChildPool
         double Delta;
         double Lambda;
         double P;
+        @signal[arrivals](type=double);
+		@statistic[interArrivalStat](source=arrivals; record=vector,stats;);
         
     gates:
         output toChildQueue;

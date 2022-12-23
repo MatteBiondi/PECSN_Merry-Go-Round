@@ -27,6 +27,8 @@ private:
     double _Delta;
     double _Lambda;
     double _P;
+    // Signals
+    simsignal_t _arrivalSignal;
 
 protected:
     virtual void initialize() override;
