@@ -6,7 +6,7 @@ import merrygoround.MerryGoRound;
 import merrygoround.Owner;
 
 
-network MRG_Network
+network MGR_Network
 {
     @display("bgb=495,186");
     submodules:
