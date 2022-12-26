@@ -38,7 +38,7 @@ void ChildPool::handleMessage(cMessage *msg)
         _newChildren = new ChildArrivalMsg();
 
         // Generate n children and add them to the message
-        for (unsigned int i = 0; i < n; ++i){
+        for (int i = 0; i < n; ++i){
             double quitTime = simTime().dbl() + _Q + exponential(_Delta);
             _newChildren->addChild(quitTime);
         }

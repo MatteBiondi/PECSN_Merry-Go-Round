@@ -1,17 +1,10 @@
-//
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
-// 
-// You should have received a copy of the GNU Lesser General Public License
-// along with this program.  If not, see http://www.gnu.org/licenses/.
-// 
+/*
+ * Project team:        Biondi, Cristofani, Guidotti
+ * Academic Year:       2022/2023
+ * File Description:    This is the module-related class for the simple
+ *                      module "DummyChildPool". This is the file containing
+ *                      implementation for the functions.
+ */
 
 #include "DummyChildPool.h"
 
@@ -40,7 +33,7 @@ void DummyChildPool::handleMessage(cMessage *msg)
         _newChildren = new ChildArrivalMsg();
 
         // Generate _bulk children and add them to the message
-        for (unsigned int i = 0; i < _bulk; ++i){
+        for (int i = 0; i < _bulk; ++i){
             double quitTime = _Q;
             _newChildren->addChild(quitTime);
         }

@@ -5,7 +5,8 @@
  *                      module "ChildPool". This is the header file
  *                      containing declarations for functions and
  *                      attributes. The inclusion of this file in ".cc"
- *                      file for the implementation is needed
+ *                      file for the implementation is needed. This module
+ *                      is used to generate children
  */
 
 #ifndef __MERRYGOROUND_CHILDPOOL_H_
