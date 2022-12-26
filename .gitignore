@@ -36,5 +36,6 @@ MerryGoRound/src/Makefile
 MerryGoRound/out/
 MerryGoRound_dbg
 MerryGoRound_release
+.metadata/
 MerryGoRound/simulations/results
 MerryGoRound/simulations/*.anf
