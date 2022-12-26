@@ -14,8 +14,8 @@ void Owner::initialize()
 
 void Owner::handleMessage(cMessage *msg)
 {
-    if(msg -> isName(MRG_IS_FREE)){
-        handleMrgIsFreeMsg();
+    if(msg -> isName(MGR_IS_FREE)){
+        handleMgrIsFreeMsg();
         delete msg;
     }
     else if(msg -> isName(HOWMANY_CHILDREN))
@@ -23,7 +23,7 @@ void Owner::handleMessage(cMessage *msg)
 }
 
 //handler of the message sent by the MGR, signaling that it has finished the ride
-void Owner::handleMrgIsFreeMsg(){
+void Owner::handleMgrIsFreeMsg(){
     _mgrIsFree = true;
     cMessage *msg = new cMessage(HOWMANY_REQUEST);
     msg->setSchedulingPriority(HIGH_PRIORITY); //highest priority
@@ -59,9 +59,9 @@ void Owner::handleNumChildrenMsg(cMessage *receivedMsg){
         }
         msg->setSchedulingPriority(HIGH_PRIORITY); //highest priority
         send(msg, "outToQueue");
-        cMessage *startMRG = new cMessage(START_MRG);
-        startMRG->setSchedulingPriority(HIGH_PRIORITY);
-        send(startMRG, "outToMGR");
+        cMessage *startMGR = new cMessage(START_MGR);
+        startMGR->setSchedulingPriority(HIGH_PRIORITY);
+        send(startMGR, "outToMGR");
         _mgrIsFree = false;
     }
 

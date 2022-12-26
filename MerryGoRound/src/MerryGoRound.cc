@@ -13,14 +13,14 @@ void MerryGoRound::initialize()
 
 void MerryGoRound::handleMessage(cMessage *msg)
 {
-    if(msg -> isName(START_MRG)){
+    if(msg -> isName(START_MGR)){
         emit(_rideStart, simTime().dbl());
         scheduleAfter(_T, _rideFinishedMsg);
         delete msg;
     }
     if(msg -> isSelfMessage()){
         emit(_rideStop, _T);
-        cMessage *msg = new cMessage(MRG_IS_FREE);
+        cMessage *msg = new cMessage(MGR_IS_FREE);
         msg->setSchedulingPriority(MEDIUM_PRIORITY);  //medium priority
         send(msg, "out");
     }
