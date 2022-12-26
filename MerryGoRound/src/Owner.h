@@ -22,6 +22,7 @@ class Owner : public cSimpleModule
     virtual void handleMessage(cMessage *msg) override;
     virtual void handleMgrIsFreeMsg();
     virtual void handleNumChildrenMsg(cMessage *msg);
+    virtual void finish() override;
 };
 
 #endif

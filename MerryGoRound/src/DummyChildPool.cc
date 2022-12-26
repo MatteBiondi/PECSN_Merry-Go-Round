@@ -34,7 +34,7 @@ void DummyChildPool::handleMessage(cMessage *msg)
 
         // Generate _bulk children and add them to the message
         for (int i = 0; i < _bulk; ++i){
-            double quitTime = _Q;
+            double quitTime = simTime().dbl() + _Q;
             _newChildren->addChild(quitTime);
         }
 

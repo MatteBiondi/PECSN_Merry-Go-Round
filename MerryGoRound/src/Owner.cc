@@ -67,3 +67,12 @@ void Owner::handleNumChildrenMsg(cMessage *receivedMsg){
 
     delete queueHowManyMessage;
 }
+
+void Owner::finish(){
+    emit(_coinSignal, 0);
+    //ALTERNATIVA 1
+    //emit(_coinSignal, _totEarn); -- levare altre emit
+    //ALTERNATIVA 2
+    /*double throughput = (double)_totEarn / simTime.dbl();
+    emit(_newSignal, throughput);*/
+}
