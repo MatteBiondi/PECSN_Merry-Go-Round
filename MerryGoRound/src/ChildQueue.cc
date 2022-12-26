@@ -22,9 +22,9 @@ Define_Module(ChildQueue);
 
 void ChildQueue::initialize(){
     this->_queue = list<Child>();
-    this->_queueTotalCount = registerSignal("queueTotalCount");
-    this->_queueQuitCount = registerSignal("queueQuitCount");
-    this->_queueServedCount = registerSignal("queueServedCount");
+    this->_queueTotal = registerSignal("queueTotal");
+    this->_queueQuit = registerSignal("queueQuit");
+    this->_queueServed = registerSignal("queueServed");
     this->_queueLength= registerSignal("queueLength");
 }
 
@@ -72,10 +72,11 @@ void ChildQueue::insertIntoQueue(ChildArrivalMsg* childArrivalMsg){
 
         // Schedule possible quit event
         quitMessage->setChild(childArrivalMsg->getChild(i));
-        quitMessage->setSchedulingPriority(3);
+        quitMessage->setSchedulingPriority(LOW_PRIORITY);
         scheduleAt(child.getQuitTime(), quitMessage);
+        emit(this->_queueTotal, child.getId());
     }
-    emit(this->_queueTotalCount, (unsigned int)childArrivalMsg->getNumChildren());
+
     emit(this->_queueLength, this->_queue.size());
 }
 
@@ -92,9 +93,10 @@ void ChildQueue::removeFromQueue(RemoveFromQueueMsg* removeMsg){
         throw cRuntimeError("Owner requested more children than available in queue (%d, %lu)",removeMsg->getHowMany(), this->_queue.size());
     }
     for(int i = 0; i < removeMsg->getHowMany(); ++i){
+        Child removedChild = this->_queue.front();
+        emit(this->_queueServed, removedChild.getId());
         this->_queue.pop_front();
     }
-    emit(this->_queueServedCount, (unsigned int)removeMsg->getHowMany());
     emit(this->_queueLength, this->_queue.size());
     EV_INFO << "Remove "<< removeMsg->getHowMany() << " children from queue" << endl;
 }
@@ -103,7 +105,7 @@ void ChildQueue::quitFromQueue(QueueQuitMsg* quitMsg){
     list<Child>::iterator queueQuitChild = find(this->_queue.begin(), this->_queue.end(), quitMsg->getChild());
     if(queueQuitChild != this->_queue.end()){
         this->_queue.erase(queueQuitChild);
-        emit(this->_queueQuitCount, 1U);
+        emit(this->_queueQuit, queueQuitChild->getId());
         emit(this->_queueLength, this->_queue.size());
         EV_INFO << "Child quits from queue" << endl;
     }

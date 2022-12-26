@@ -18,17 +18,16 @@ package merrygoround;
 simple ChildQueue
 {
     parameters:
-        @signal[queueTotalCount](type=unsigned int);
-        @signal[queueQuitCount](type=unsigned int);
-        @signal[queueServedCount](type=unsigned int);
+        @signal[queueTotal](type=int);
+        @signal[queueQuit](type=int);
+        @signal[queueServed](type=int);
         @signal[queueLength](type=unsigned int);
-        @statistic[queueTotalCountStat](source="queueTotalCount";record=sum); 
-        @statistic[queueQuitCountStat](source="queueQuitCount";record=sum);     
-        @statistic[queueServedCountStat](source="queueServedCount";record=sum); 
-        @statistic[queueLengthStat](source="queueLength";record=mean,timeavg);     
+        @statistic[queueTotalStat](title="ChildrenInQueue";source="queueTotal";record=vector, count); 
+        @statistic[queueQuitStat](title="ChildrenQuit";source="queueQuit";record=vector, count);     
+        @statistic[queueServedStat](title="ChildrenServed";source="queueServed";record=vector,count); 
+        @statistic[queueLengthStat](title="QueueLenght";source="queueLength";record=vector,timeavg);     
     gates:
         input childPoolIn;
         input ownerIn;
         output ownerOut;
-        
 }
