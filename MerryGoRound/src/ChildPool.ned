@@ -13,7 +13,7 @@ package merrygoround;
 simple ChildPool
 {
     parameters:
-        int Q;
+        double Q;
         double Delta;
         double Lambda;
         double P;

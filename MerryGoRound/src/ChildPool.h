@@ -24,7 +24,7 @@ private:
     cMessage *_nextArrival;
     double _time;
     // Parameters
-    int _Q;
+    double _Q;
     double _Delta;
     double _Lambda;
     double _P;

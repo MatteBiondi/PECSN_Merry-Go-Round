@@ -13,7 +13,7 @@ ChildArrivalMsg::ChildArrivalMsg(const char* name, short kind) : cMessage(name, 
 };
 
 // Create and add a child to the vector
-void ChildArrivalMsg::addChild(double quitTime){
+void ChildArrivalMsg::addChild(SimTime quitTime){
     _children.emplace_back(quitTime);
 }
 

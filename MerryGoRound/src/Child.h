@@ -10,13 +10,18 @@
 #ifndef CHILD_H_
 #define CHILD_H_
 
+#include <omnetpp.h>
+
+using namespace omnetpp;
+using namespace std;
+
 class Child {
 public:
     // Default constructor
     Child();
 
     // Constructor
-    Child(double _quitTime);
+    Child(SimTime _quitTime);
 
     // Copy constructor
     Child(const Child &other);
@@ -31,12 +36,12 @@ public:
     int getId() const;
 
     // Get the value of the 'quitTime' attribute
-    double getQuitTime() const;
+    SimTime getQuitTime() const;
 
 private:
     static int _nextId;
     int _id;
-    double _quitTime;
+    SimTime _quitTime;
 };
 
 #endif /* CHILD_H_ */

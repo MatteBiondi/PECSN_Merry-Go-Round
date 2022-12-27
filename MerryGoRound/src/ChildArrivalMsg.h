@@ -26,7 +26,7 @@ public:
     ChildArrivalMsg(const char* name = CHILD_ARRIVAL, short kind = 0);
 
     // Create and add a child to the vector
-    void addChild(double quitTime);
+    void addChild(SimTime quitTime);
 
     // Get the number of children in the vector
     int getNumChildren() const;

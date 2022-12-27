@@ -14,7 +14,7 @@ int Child::_nextId = 1;
 Child::Child(){}
 
 // Constructor implementation
-Child::Child(double _quitTime) :
+Child::Child(SimTime _quitTime) :
     _id(_nextId++), _quitTime(_quitTime) {}
 
 // Copy constructor implementation
@@ -39,6 +39,6 @@ int Child::getId() const{
 }
 
 // Get the value of the 'quitTime' attribute
-double Child::getQuitTime() const{
+SimTime Child::getQuitTime() const{
     return _quitTime;
 }
