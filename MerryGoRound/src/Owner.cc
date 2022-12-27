@@ -42,7 +42,8 @@ void Owner::handleNumChildrenMsg(cMessage *receivedMsg){
     int T = mgr_module->getT();
 
     //if there is no enough time to complete a ride, it will not start
-    if(simTime().dbl() + T > stod(getEnvir() -> getConfig() -> getConfigValue("sim-time-limit"))){
+    SimTime limit = SimTime::parse(getEnvir() -> getConfig() -> getConfigValue("sim-time-limit"));
+    if(simTime().dbl() + T > limit.dbl()){
         delete queueHowManyMessage;
         return;
     }
