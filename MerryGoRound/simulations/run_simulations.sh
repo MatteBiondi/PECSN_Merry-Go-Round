@@ -15,7 +15,8 @@ CONFIGURATIONS=(
 )
 
 for config in ${CONFIGURATIONS[@]}; do
-  ../src/MerryGoRound_dbg -u Cmdenv -c $config -n .:../src omnetpp.ini
+  printf "\n*** Running $config\n"
+  ../src/MerryGoRound_dbg -u Cmdenv -c $config -n .:../src omnetpp.ini > simulation.out
 done
 
 echo "Simulation complete"
