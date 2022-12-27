@@ -39,3 +39,4 @@ MerryGoRound_release
 .metadata/
 MerryGoRound/simulations/results
 MerryGoRound/simulations/*.anf
+MerryGoRound/simulations/*.out
