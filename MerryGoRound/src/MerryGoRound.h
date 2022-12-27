@@ -18,6 +18,9 @@ class MerryGoRound : public cSimpleModule
     virtual void initialize() override;
     virtual void handleMessage(cMessage *msg) override;
     virtual void finish() override;
+
+  public:
+    virtual int getT();
 };
 
 #endif

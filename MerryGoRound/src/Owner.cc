@@ -1,6 +1,4 @@
 #include "Owner.h"
-#include "RemoveFromQueueMsg_m.h"
-#include "QueueHowManyMsg_m.h"
 
 Define_Module(Owner);
 
@@ -39,6 +37,15 @@ void Owner::handleNumChildrenMsg(cMessage *receivedMsg){
         return;
     }
 
+    //get the T parameter from the mgr in order to check if we can start a ride
+    MerryGoRound  *mgr_module = check_and_cast<MerryGoRound*>(findModuleByPath("merryGoRound"));
+    int T = mgr_module->getT();
+
+    //if there is no enough time to complete a ride, it will not start
+    if(simTime().dbl() + T > stod(getEnvir() -> getConfig() -> getConfigValue("sim-time-limit"))){
+        delete queueHowManyMessage;
+        return;
+    }
 
     int num = queueHowManyMessage -> getHowMany();
 

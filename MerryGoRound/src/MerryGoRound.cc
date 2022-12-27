@@ -19,7 +19,9 @@ void MerryGoRound::handleMessage(cMessage *msg)
         delete msg;
     }
     if(msg -> isSelfMessage()){
-        emit(_rideStop, _T);
+        //if simTime is smaller than that value it means that the ride started during the warm-up period, so it must not be considered
+        if(simTime() - getSimulation()->getWarmupPeriod() >= _T)
+            emit(_rideStop, _T);
         cMessage *msg = new cMessage(MGR_IS_FREE);
         msg->setSchedulingPriority(MEDIUM_PRIORITY);  //medium priority
         send(msg, "out");
@@ -34,3 +36,5 @@ void MerryGoRound::finish(){
     else
         delete _rideFinishedMsg;
 }
+
+int MerryGoRound::getT(){return _T;}

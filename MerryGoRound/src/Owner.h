@@ -4,8 +4,12 @@
 #include <omnetpp.h>
 #include <string>
 #include "utility.h"
+#include "MerryGoRound.h"
+#include "RemoveFromQueueMsg_m.h"
+#include "QueueHowManyMsg_m.h"
 
 using namespace omnetpp;
+using namespace std;
 
 class Owner : public cSimpleModule
 {
