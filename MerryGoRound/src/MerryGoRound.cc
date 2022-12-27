@@ -27,6 +27,7 @@ void MerryGoRound::handleMessage(cMessage *msg)
 }
 
 void MerryGoRound::finish(){
+    emit(_rideStop, 0); //to compute the final utilization of the MGR
     //check if the message is still in the FES
     if(_rideFinishedMsg -> isScheduled())
         cancelAndDelete(_rideFinishedMsg);
