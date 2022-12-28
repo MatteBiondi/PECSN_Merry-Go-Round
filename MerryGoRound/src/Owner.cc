@@ -8,6 +8,7 @@ void Owner::initialize()
     _minChildren = _nSeats * (double)par("v_fraction");
     _coinPerRide = par("c");
     _coinSignal = registerSignal("earnedCoins");
+    _peopleOnBoardSignal = registerSignal("peopleOnBoard");
 }
 
 void Owner::handleMessage(cMessage *msg)
@@ -58,12 +59,14 @@ void Owner::handleNumChildrenMsg(cMessage *receivedMsg){
             msg -> setHowMany(_nSeats);
             _totEarn += _nSeats*_coinPerRide;
             emit(_coinSignal, _nSeats*_coinPerRide);
+            emit(_peopleOnBoardSignal, _nSeats);
         }
         else{
             //otherwise I ask for all the children in the queue
             msg -> setHowMany(num);
             _totEarn += num*_coinPerRide;
             emit(_coinSignal, num*_coinPerRide);
+            emit(_peopleOnBoardSignal, num);
         }
         msg->setSchedulingPriority(HIGH_PRIORITY); //highest priority
         send(msg, "outToQueue");

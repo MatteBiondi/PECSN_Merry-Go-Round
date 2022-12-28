@@ -8,6 +8,8 @@ simple Owner
 		int N;				//number of seats of the MGR
 		@signal[earnedCoins](type=int);
 		@statistic[throughput](source=sumPerDuration(earnedCoins); record=last;);
+		@signal[peopleOnBoard](type=int);
+		@statistic[avgPeoplePerRide](source=peopleOnBoard; record=count, mean;);
 	
 	gates:
 		input inFromQueue;

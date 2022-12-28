@@ -20,6 +20,7 @@ class Owner : public cSimpleModule
     int _nSeats;
     bool _mgrIsFree = true;
     simsignal_t _coinSignal;
+    simsignal_t _peopleOnBoardSignal;
 
   protected:
     virtual void initialize() override;
