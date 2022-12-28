@@ -5,7 +5,6 @@ Define_Module(MerryGoRound);
 void MerryGoRound::initialize()
 {
     _T = par("T");
-    _rideStart = registerSignal("rideStart");
     _rideStop = registerSignal("rideStop");
     _rideFinishedMsg = new cMessage("rideFinished");
     _rideFinishedMsg->setSchedulingPriority(MEDIUM_PRIORITY); //medium priority
@@ -14,7 +13,6 @@ void MerryGoRound::initialize()
 void MerryGoRound::handleMessage(cMessage *msg)
 {
     if(msg -> isName(START_MGR)){
-        emit(_rideStart, simTime().dbl());
         scheduleAfter(_T, _rideFinishedMsg);
         delete msg;
     }
