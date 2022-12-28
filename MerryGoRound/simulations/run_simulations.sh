@@ -14,9 +14,27 @@ CONFIGURATIONS=(
     "Validation_continuity_test_P"
 )
 
+parallel='false'
+
+print_usage() {
+  echo "Usage: bash $0 [-p]"
+}
+
+while getopts 'p' flag; do
+  case "${flag}" in
+    p) parallel='true' ;;
+    *) print_usage
+       exit 1 ;;
+  esac
+done
+
 for config in ${CONFIGURATIONS[@]}; do
   printf "\n*** Running $config\n"
-  ../src/MerryGoRound_dbg -u Cmdenv -c $config -n .:../src omnetpp.ini > simulation.out
+  if [ $parallel = 'true' ] ; then
+     opp_runall ../src/MerryGoRound_dbg -u Cmdenv -c $config -n .:../src omnetpp.ini > simulation.out
+  else
+    ../src/MerryGoRound_dbg -u Cmdenv -c $config -n .:../src omnetpp.ini > simulation.out
+  fi 
 done
 
 echo "Simulation complete"
