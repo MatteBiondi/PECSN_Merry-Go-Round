@@ -58,14 +58,14 @@ void Owner::handleNumChildrenMsg(cMessage *receivedMsg){
             //if there are more children than the MGR capacity, I have to ask for the maximum number, the capacity itself
             msg -> setHowMany(_nSeats);
             _totEarn += _nSeats*_coinPerRide;
-            emit(_coinSignal, _nSeats*_coinPerRide);
+            emit(_coinSignal, (double)_nSeats*_coinPerRide);
             emit(_peopleOnBoardSignal, _nSeats);
         }
         else{
             //otherwise I ask for all the children in the queue
             msg -> setHowMany(num);
             _totEarn += num*_coinPerRide;
-            emit(_coinSignal, num*_coinPerRide);
+            emit(_coinSignal, (double)num*_coinPerRide);
             emit(_peopleOnBoardSignal, num);
         }
         msg->setSchedulingPriority(HIGH_PRIORITY); //highest priority
@@ -80,5 +80,5 @@ void Owner::handleNumChildrenMsg(cMessage *receivedMsg){
 }
 
 void Owner::finish(){
-    emit(_coinSignal, 0);
+    emit(_coinSignal, 0.0);
 }

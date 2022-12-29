@@ -15,7 +15,7 @@ class Owner : public cSimpleModule
 {
   private:
     int _minChildren;
-    int _coinPerRide;
+    double _coinPerRide;
     int _totEarn = 0;
     int _nSeats;
     bool _mgrIsFree = true;
