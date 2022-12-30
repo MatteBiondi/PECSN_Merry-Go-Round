@@ -3,6 +3,7 @@ import pandas as pd
 import scipy.stats as st
 from numpy import sort
 from matplotlib import pyplot as plt
+import seaborn as sns
 
 
 def compute_stats(data):
@@ -37,7 +38,7 @@ def confidence_interval(data, level):
     root_n = math.sqrt(len(data))
     r = (sample_std / root_n) * z_alpha
 
-    return sort([sample_mean - r, sample_mean + r]), abs(r)*2
+    return sort([sample_mean - r, sample_mean + r]), abs(r) * 2
 
 
 def compute_validation_md1_confidence(confidence):
@@ -75,40 +76,64 @@ def compute_validation_md1_confidence(confidence):
                               confidence))
 
 
-def plot_calibration():
+def plot_confidence_interval(x_range, y_range, interval_width, color):
+    for x, y, r in zip(x_range, y_range, interval_width):
+        # if r < 0.001:
+        #    continue
+        top = y + r
+        bottom = y - r
+        left = x - 2.5
+        right = x + 2.5
+        plt.plot([x, x], [top, bottom], color=color, linewidth=1)
+        plt.plot([left, right], [top, top], color=color, linewidth=1)
+        plt.plot([left, right], [bottom, bottom], color=color, linewidth=1)
+
+
+def plot_calibration(palette, confidence):
     utilization_data = pd.read_csv('data/Scalar_Calibration_Lambda_Utilization.csv')
 
-    X_range = [0, 220]
-    Y_range = [0, 1]
+    X_range = [0, 230]
+    Y_range = [-0.1, 1.1]
     T_range = ['120', '300']
     vFraction_range = ['0.25', '1']
-    lambda_range = list(range(11, 100, 5))
+    lambda_range = list(range(1, 100, 5))
     lambda_range.extend(list(range(100, 240, 20)))
+    colors = iter(palette)
 
     utilization = []
+    intervals = []
     for T in T_range:
         for vFraction in vFraction_range:
             for _lambda in lambda_range:
-                utilization.append(
-                    utilization_data
-                    .query(f"T == {T} and vFraction == {vFraction} and Lambda == {_lambda}").loc[:, 'value']
-                    .aggregate('mean'))
-            plt.plot(lambda_range, utilization, marker='*', label=f'T={T}, vFraction={vFraction}')
-            utilization = []
+                config_data = utilization_data.query(
+                    f"T == {T} and vFraction == {vFraction} and Lambda == {_lambda}").loc[:, 'value']
+                utilization.append(config_data.aggregate('mean'))
+                interval, r = confidence_interval(config_data, confidence)
+                intervals.append(r)
 
+            # plot lines
+            color = next(colors)
+            plt.plot(lambda_range, utilization,
+                     marker=".", label=f'T={T}, vFraction={vFraction}', color=color, linestyle="dashed", linewidth=1)
+            plot_confidence_interval(lambda_range, utilization, intervals, color)
+            utilization = []
+            intervals = []
+
+    # plot items
     plt.title("System utilization over inter-arrival time")
     plt.xlabel("Mean inter-arrival time [s]")
     plt.ylabel("System utilization [%]")
     plt.legend(loc='upper right')
-    plt.grid(color='gray', linestyle='dotted')
+    # plt.grid(color='gray', linestyle='dotted')
     plt.xlim(X_range)
     plt.ylim(Y_range)
-    plt.xticks(range(X_range[0], X_range[1] + 1, 10), labels=range(X_range[0], X_range[1] + 1, 10), rotation=45)
+    plt.xticks(range(X_range[0], X_range[1] + 1, 20), labels=range(X_range[0], X_range[1] + 1, 20), rotation=45)
     plt.gcf().set_size_inches(19, 9.5)
+
     plt.savefig("calibration_utilization.svg", dpi=1200, format='svg')
-    plt.show()
+    # plt.show()
 
 
 if __name__ == '__main__':
     compute_validation_md1_confidence(confidence=0.95)
-    plot_calibration()
+    plot_calibration(sns.color_palette(), 0.99)
