@@ -25,7 +25,7 @@ simple ChildQueue
         @statistic[queueTotalStat](title="ChildrenInQueue";source="queueTotal";record=vector, count); 
         @statistic[queueQuitStat](title="ChildrenQuit";source="queueQuit";record=vector, count);     
         @statistic[queueServedStat](title="ChildrenServed";source="queueServed";record=vector,count); 
-        @statistic[queueLengthStat](title="QueueLenght";source="queueLength";record=vector,timeavg);     
+        @statistic[queueLengthStat](title="QueueLenght";source=timeavg(queueLength);record=vector,last);     
     gates:
         input childPoolIn;
         input ownerIn;
