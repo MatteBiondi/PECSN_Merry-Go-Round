@@ -14,15 +14,15 @@ CONFIGURATIONS=(
     "Validation_continuity_test_P"
 )
 
-parallel='false'
+parallel='true'
 
 print_usage() {
-  echo "Usage: bash $0 [-p]"
+  echo "Usage: bash $0 [-s]"
 }
 
-while getopts 'p' flag; do
+while getopts 's' flag; do
   case "${flag}" in
-    p) parallel='true' ;;
+    s) parallel='false' ;;
     *) print_usage
        exit 1 ;;
   esac
