@@ -1,9 +1,12 @@
+import glob
 import math
+import numpy as np
 import pandas as pd
 import scipy.stats as st
 from numpy import sort
 from matplotlib import pyplot as plt
 import seaborn as sns
+import statsmodels.api as sm
 
 
 def compute_stats(data):
@@ -78,8 +81,8 @@ def compute_validation_md1_confidence(confidence):
 
 def plot_confidence_interval(x_range, y_range, interval_width, color):
     for x, y, r in zip(x_range, y_range, interval_width):
-        # if r < 0.001:
-        #    continue
+        if r == 0:
+            continue
         top = y + r
         bottom = y - r
         left = x - 2.5
@@ -134,6 +137,47 @@ def plot_calibration(palette, confidence):
     # plt.show()
 
 
+def qq_plot(load, bulk, statistic):
+    data = pd.read_csv(
+        f'data/{statistic}/Factorial_Analysis_{load}_load_{"bulk" if bulk else "single"}_{statistic}.csv', sep=';',
+        decimal=',')
+
+    residuals = []
+
+    for index, row in data.iterrows():
+        d = row[5:] - row[5:].mean()
+        residuals.extend(d)
+
+    # sm.qqplot(np.array(residuals))
+    # plt.savefig("qq.svg", dpi=1200, format='svg')
+    # plt.close()
+
+    residuals.sort()
+
+    plt.grid(color='gray', linestyle='dotted')
+    quantiles = np.array([((j + 1 - 0.5) / len(data) / 10, x) for j, x in enumerate(residuals)])
+    normal_quantile = [st.norm.ppf(q) for q in quantiles[:, 0]]
+
+    plt.plot(normal_quantile, residuals, linestyle='None', marker='.')
+    z = np.polyfit(normal_quantile, residuals, 1)
+    p = np.poly1d(z)
+    plt.plot(normal_quantile, p(normal_quantile), "r--")
+    labels = [
+        "R{} = {:.3f}".format('\u00b2', np.corrcoef(normal_quantile, residuals)[0, 1] ** 2),
+        f"Mean = {abs(np.mean(residuals)):.3f}",
+        f"Std = {np.std(residuals, ddof=1):.3f}"
+    ]
+
+    plt.gca().annotate('\n'.join(labels),
+                       xy=(0.01, 0.99), xycoords='axes fraction', fontsize='larger', verticalalignment='top')
+    plt.title(f'{load.capitalize()} {"bulk" if bulk else "single"} {statistic}')
+    plt.xlabel("Standard normal quantiles")
+    plt.ylabel("Residuals quantiles")
+    plt.savefig("qq1.svg", dpi=1200, format='svg')
+    plt.show()
+
+
 if __name__ == '__main__':
-    compute_validation_md1_confidence(confidence=0.95)
-    plot_calibration(sns.color_palette(), 0.99)
+    # compute_validation_md1_confidence(confidence=0.95)
+    # plot_calibration(sns.color_palette(), 0.99)
+    qq_plot(load='low', bulk=False, statistic='utilization')
