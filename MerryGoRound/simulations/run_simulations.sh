@@ -1,17 +1,12 @@
 #!/bin/bash
 
 CONFIGURATIONS=(
-    "Validation_deterministic_test" 
-    "Validation_consistency_test" 
-    "Validation_degeneracy_test_Q_and_Delta_0" 
-    "Validation_degeneracy_test_N_0" 
-    "Validation_degeneracy_test_Lambda_0" 
-    "Validation_degeneracy_test_T_0"
-    "Validation_continuity_test_N"
-    "Validation_continuity_test_Delta"
-    "Validation_continuity_test_Lambda"
-    "Validation_continuity_test_T"
-    "Validation_continuity_test_P"
+    "Low_Load_Throughput_Optimization" 
+    "Medium_Load_Throughput_Optimization" 
+    "High_Load_Throughput_Optimization"
+    "Low_Load_Utilization_Optimization"
+    "Medium_Load_Utilization_Optimization"
+    "High_Load_Utilization_Optimization"
 )
 
 parallel='true'
