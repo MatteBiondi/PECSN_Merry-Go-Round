@@ -7,7 +7,7 @@ simple Owner
 		double c;				//number of coins earned for each child who enjoys a ride
 		int N;					//number of seats of the MGR
 		@signal[earnedCoins](type=double);
-		@statistic[throughput](source=sumPerDuration(earnedCoins); record=vector, last;);
+		@statistic[coinsPerUnitOfTime](source=sumPerDuration(earnedCoins); record=vector, last;);
 		@signal[peopleOnBoard](type=int);
 		@statistic[avgPeoplePerRide](source=peopleOnBoard; record=count, mean;);
 	
