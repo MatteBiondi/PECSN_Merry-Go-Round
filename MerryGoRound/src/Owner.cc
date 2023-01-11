@@ -25,7 +25,7 @@ void Owner::handleMessage(cMessage *msg)
 void Owner::handleMgrIsFreeMsg(){
     _mgrIsFree = true;
     cMessage *msg = new cMessage(HOWMANY_REQUEST);
-    msg->setSchedulingPriority(HIGH_PRIORITY); //highest priority
+    msg->setSchedulingPriority(MEDIUM_PRIORITY); //medium priority
     send(msg, "outToQueue");
 }
 
