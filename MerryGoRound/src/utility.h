@@ -12,3 +12,4 @@
 #define REMOVE_FROM_QUEUE   "RemoveFromQueue"
 #define MGR_IS_FREE         "MgrIsFree"
 #define START_MGR           "StartMgr"
+#define RIDE_FINISHED       "RideFinished"

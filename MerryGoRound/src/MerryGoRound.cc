@@ -6,7 +6,7 @@ void MerryGoRound::initialize()
 {
     _T = par("T");
     _rideStop = registerSignal("rideStop");
-    _rideFinishedMsg = new cMessage("rideFinished");
+    _rideFinishedMsg = new cMessage(RIDE_FINISHED);
     _rideFinishedMsg->setSchedulingPriority(MEDIUM_PRIORITY); //medium priority
 }
 
