@@ -22,6 +22,7 @@ void ChildPool::initialize()
 
     // Generate the message for next children creation
     _nextArrival = new cMessage(CREATE_CHILDREN);
+    _nextArrival->setSchedulingPriority(HIGH_PRIORITY);
     _time = exponential(_Lambda);
     emit(_arrivalSignal, _time);
     scheduleAt(simTime()+_time, _nextArrival);
