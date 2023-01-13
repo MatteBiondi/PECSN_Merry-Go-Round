@@ -1,3 +1,11 @@
+/*
+ * Project team:        Biondi, Cristofani, Guidotti
+ * Academic Year:       2022/2023
+ * File Description:    This is the module-related class for the simple
+ *                      module "Owner". This is the file containing
+ *                      implementation for the functions.
+ */
+
 #include "Owner.h"
 
 Define_Module(Owner);

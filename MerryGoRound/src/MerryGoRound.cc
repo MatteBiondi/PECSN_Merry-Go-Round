@@ -1,3 +1,11 @@
+/*
+ * Project team:        Biondi, Cristofani, Guidotti
+ * Academic Year:       2022/2023
+ * File Description:    This is the module-related class for the simple
+ *                      module "MerryGoRound". This is the file containing
+ *                      implementation for the functions.
+ */
+
 #include "MerryGoRound.h"
 
 Define_Module(MerryGoRound);

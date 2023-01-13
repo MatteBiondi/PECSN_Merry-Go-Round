@@ -1,3 +1,12 @@
+//
+//Project team:		Biondi, Cristofani, Guidotti
+//Academic Year: 	2022/2023
+//File Description: This file represents the structure of the 
+//					simple module in charge of represting the 
+//					MGR rides by taking into account the ride 
+//					duration
+//
+
 package merrygoround;
 
 simple MerryGoRound
