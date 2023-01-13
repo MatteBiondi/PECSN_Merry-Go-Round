@@ -1,3 +1,11 @@
+//
+//Project team:		Biondi, Cristofani, Guidotti
+//Academic Year: 	2022/2023
+//File Description: This file represents the structure of the 
+//					simple module in charge deciding to activate 
+//					or not the MGR and with how many people
+//
+
 package merrygoround;
 
 simple Owner
