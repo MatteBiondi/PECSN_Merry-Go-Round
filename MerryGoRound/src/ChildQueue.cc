@@ -1,17 +1,10 @@
-//
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
-// 
-// You should have received a copy of the GNU Lesser General Public License
-// along with this program.  If not, see http://www.gnu.org/licenses/.
-// 
+/*
+ * Project team:        Biondi, Cristofani, Guidotti
+ * Academic Year:       2022/2023
+ * File Description:    This is the module-related class for the simple
+ *                      module "ChildQueue". This is the file containing
+ *                      implementation for the functions.
+ */
 
 #include "ChildQueue.h"
 
@@ -28,6 +21,12 @@ void ChildQueue::initialize(){
     this->_queueLength= registerSignal("queueLength");
 }
 
+/**
+ * Based on message name the message is casted to the appropriate supertype, handled and then deleted in order to avoid
+ * memory leaks
+ *
+ * @param msg message received by the current module
+ */
 void ChildQueue::handleMessage(cMessage *msg){
     if(msg->isName(CHILD_ARRIVAL)){
         ChildArrivalMsg* childArrivalMsg = check_and_cast<ChildArrivalMsg*>(msg);
@@ -60,53 +59,84 @@ void ChildQueue::handleMessage(cMessage *msg){
     }
 }
 
-/*
- * Message handler functions
- */
 
+/*******************************/
+/*  Message handler functions  */
+/*******************************/
+
+/**
+ * Insert new children into queue, taking the information needed from the message passed as argument. For each child the
+ * possible quit event in the future is scheduled
+ *
+ * @param childArrivalMsg message received from ChildPool module, containing number of children to add to the queue
+ */
 void ChildQueue::insertIntoQueue(ChildArrivalMsg* childArrivalMsg){
     for(int i = 0; i < childArrivalMsg->getNumChildren(); ++i){
         Child child(childArrivalMsg->getChild(i));
         QueueQuitMsg* quitMessage = new QueueQuitMsg(QUIT_CHILD);
-        this->_queue.push_back(child);
+        this->_queue.push_back(child); // Add child to the back of the queue
 
-        // Schedule possible quit event
+        // Schedule possible quit event, if the child is served before the quit message,
+        // the event will not produce any effect
         quitMessage->setChild(childArrivalMsg->getChild(i));
         quitMessage->setSchedulingPriority(LOW_PRIORITY);
         scheduleAt(child.getQuitTime(), quitMessage);
-        emit(this->_queueTotal, child.getId());
+        emit(this->_queueTotal, child.getId()); // Increase the total number of children arrived in the system
     }
 
-    emit(this->_queueLength, this->_queue.size());
+    emit(this->_queueLength, this->_queue.size()); // Update queue size statistic
 }
 
+/**
+ * Send the QueueHowManyMessage message to the Owner module. The message contains the number of children currently
+ * waiting in the queue
+ */
 void ChildQueue::sendHowManyMessage(){
+    //Build message
     QueueHowManyMessage* queueMsg = new QueueHowManyMessage(HOWMANY_CHILDREN);
     queueMsg->setHowMany(this->_queue.size());
     queueMsg->setSchedulingPriority(HIGH_PRIORITY);
+
+    // Send message to the Owner module
     send(queueMsg, "ownerOut");
     EV_INFO << "There are " << this->_queue.size() << " children waiting in queue" << endl;
 }
 
+/**
+ * Remove the number of children specified in the message passed as argument
+ *
+ * @param removeMsg message received from Owner module, containing the number of children that are going to be served,
+ * so that must be removed from queue
+ * @throws cRuntimeError in case the number of children to remove from queue is higher than the ones currently queued
+ */
 void ChildQueue::removeFromQueue(RemoveFromQueueMsg* removeMsg){
     if(removeMsg->getHowMany() > 0 && this->_queue.size() < (size_t)removeMsg->getHowMany()){
-        throw cRuntimeError("Owner requested more children than available in queue (%d, %lu)",removeMsg->getHowMany(), this->_queue.size());
+        throw cRuntimeError("Owner requested more children than available in queue (%d, %lu)",
+                            removeMsg->getHowMany(), this->_queue.size());
     }
     for(int i = 0; i < removeMsg->getHowMany(); ++i){
-        Child removedChild = this->_queue.front();
-        emit(this->_queueServed, removedChild.getId());
-        this->_queue.pop_front();
+        Child removedChild = this->_queue.front(); //Take the first child in queue, but doesn't remove it from the queue
+        emit(this->_queueServed, removedChild.getId()); // Increase the number of children served
+        this->_queue.pop_front(); //Remove child from the front of the queue
     }
-    emit(this->_queueLength, this->_queue.size());
+    emit(this->_queueLength, this->_queue.size());// Update queue size statistic
     EV_INFO << "Remove "<< removeMsg->getHowMany() << " children from queue" << endl;
 }
 
+/**
+ * Remove from the queue the child identified by the ID contained in the message passed as argument because he has
+ * decided to leave the queue before being served
+ *
+ * @param quitMsg self message containing the ID of the child that wants to leave the queue because he has waited up to
+ * his patience limit
+ */
 void ChildQueue::quitFromQueue(QueueQuitMsg* quitMsg){
+    // Find the child having the ID contained in the message, note that the IDs are unique by construction !
     list<Child>::iterator queueQuitChild = find(this->_queue.begin(), this->_queue.end(), quitMsg->getChild());
     if(queueQuitChild != this->_queue.end()){
-        this->_queue.erase(queueQuitChild);
-        emit(this->_queueQuit, queueQuitChild->getId());
-        emit(this->_queueLength, this->_queue.size());
+        this->_queue.erase(queueQuitChild); // Remove the child pointed by iterator
+        emit(this->_queueQuit, queueQuitChild->getId()); //Increase the number of children quit from queue
+        emit(this->_queueLength, this->_queue.size()); //Update queue size statistic
         EV_INFO << "Child quits from queue" << endl;
     }
 }
