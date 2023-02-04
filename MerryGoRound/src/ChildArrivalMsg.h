@@ -3,7 +3,8 @@
  * Academic Year:       2022/2023
  * File Description:    This is the file containing the definition
  *                      for functions and attributes of the class
- *                      ChildArrivalMsg.
+ *                      ChildArrivalMsg. This class represents the
+ *                      message containing the arrived children.
  */
 
 #ifndef CHILDARRIVALMSG_H_

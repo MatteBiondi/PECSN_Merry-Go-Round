@@ -10,6 +10,9 @@
 
 Define_Module(ChildPool);
 
+/**
+ * Initialize private attributes of the class and generate the message for next children creation
+ */
 void ChildPool::initialize()
 {
     // Initialize private attribute of the class
@@ -28,10 +31,18 @@ void ChildPool::initialize()
     scheduleAt(simTime()+_time, _nextArrival);
 }
 
+
+/**
+ * If the received message is 'CreateChildren', it randomly draws the number of children to be created,
+ * creates them and sends them to the ChildQueue module.
+ * Then, it generates the message for next children creation
+ *
+ * @param msg message received by the current module
+ */
 void ChildPool::handleMessage(cMessage *msg)
 {
-    // Check that the received message is the self message (obvious for the module)
-    if(msg->isSelfMessage()){
+    // Check that the received message is the self message
+    if(msg->isSelfMessage() && msg->isName(CREATE_CHILDREN)){
         // Extract a random number of children to be generated
         int n = (_P == 1)? 1 : (geometric(_P) + 1);
         emit(_bulkSignal, n);
@@ -53,8 +64,15 @@ void ChildPool::handleMessage(cMessage *msg)
         emit(_arrivalSignal, _time);
         scheduleAt(simTime()+_time, _nextArrival);
     }
+    else{
+        EV_WARN << "Unexpected message {"<< msg->getName() << "}" << endl;
+    }
 }
 
+
+/**
+ * If the 'CreateChildren' message is scheduled, it will be cancelled. Then it will be deleted.
+ */
 void ChildPool::finish() {
     if (_nextArrival->isScheduled())
         cancelAndDelete(_nextArrival);
