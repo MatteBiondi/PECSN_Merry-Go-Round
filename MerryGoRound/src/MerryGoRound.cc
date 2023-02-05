@@ -10,6 +10,9 @@
 
 Define_Module(MerryGoRound);
 
+/**
+ * Initialize private attributes of the class and generate the self-message to notify the stop of a MGR ride
+ */
 void MerryGoRound::initialize()
 {
     _T = par("T");
@@ -18,6 +21,14 @@ void MerryGoRound::initialize()
     _rideFinishedMsg->setSchedulingPriority(MEDIUM_PRIORITY); //medium priority
 }
 
+/**
+ * If the received message is 'Start_MGR', it schedule the self message in order to simulate a ride
+ *
+ * If the received message is the self-message, it means that the ride has finished and it has
+ * to notify the owner
+ *
+ * @param msg message received by the current module
+ */
 void MerryGoRound::handleMessage(cMessage *msg)
 {
     if(msg -> isName(START_MGR)){

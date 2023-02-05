@@ -26,11 +26,13 @@ using namespace std;
 class Owner : public cSimpleModule
 {
   private:
+    //Parameters
     int _minChildren;
     double _coinPerRide;
     int _totEarn = 0;
     int _nSeats;
     bool _mgrIsFree = true;
+    //Signals
     simsignal_t _coinSignal;
     simsignal_t _peopleOnBoardSignal;
 

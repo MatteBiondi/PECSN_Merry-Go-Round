@@ -10,6 +10,9 @@
 
 Define_Module(Owner);
 
+/**
+ * Initialize private attributes of the class
+ */
 void Owner::initialize()
 {
     _nSeats = par("N");
@@ -29,7 +32,10 @@ void Owner::handleMessage(cMessage *msg)
         handleNumChildrenMsg(msg);
 }
 
-//handler of the message sent by the MGR, signaling that it has finished the ride
+/**
+ * Handler of the message sent by the MGR, signaling that it has finished the ride
+ * The owner will react by checking how many children are in the queue
+ */
 void Owner::handleMgrIsFreeMsg(){
     _mgrIsFree = true;
     cMessage *msg = new cMessage(HOWMANY_REQUEST);
@@ -37,7 +43,13 @@ void Owner::handleMgrIsFreeMsg(){
     send(msg, "outToQueue");
 }
 
-//handler of the message sent by the queue, signaling the actual number of children in it
+/**
+ * Handler of the message sent by the queue, signaling the actual number of children in it
+ * The owner will react by checking if the MGR is free and if the number of children in the queue
+ * is sufficient to start a ride
+ *
+ * @param msg message received by the current module
+ */
 void Owner::handleNumChildrenMsg(cMessage *receivedMsg){
     QueueHowManyMessage *queueHowManyMessage = check_and_cast<QueueHowManyMessage*>(receivedMsg);
     //if the MGR is busy, I can not accept new children to ride
