@@ -18,11 +18,11 @@
 
 class QueueHowManyMessage;
 /**
- * Class generated from <tt>QueueHowManyMsg.msg:16</tt> by opp_msgtool.
+ * Class generated from <tt>QueueHowManyMsg.msg:1</tt> by opp_msgtool.
  * <pre>
  * message QueueHowManyMessage
  * {
- *     int howMany;
+ *     int howMany; //Number of children currently waiting in the queue
  * }
  * </pre>
  */
